@@ -62,7 +62,8 @@ withSize size (Square square) =
 view : Square -> Html msg
 view (Square { backgroundColor, borderRadius, size }) =
     Html.div
-        [ Html.css
+        [ Html.class "placeholder-square"
+        , Html.css
             [ Css.backgroundColor backgroundColor
             , Css.height size
             , Css.width size

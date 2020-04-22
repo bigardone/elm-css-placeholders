@@ -50,7 +50,8 @@ withBackgroundColor color (Line line) =
 view : Line -> Html msg
 view (Line { backgroundColor }) =
     Html.div
-        [ Html.css
+        [ Html.class "placeholder-line"
+        , Html.css
             [ Css.backgroundColor backgroundColor
             , Css.height <| Css.px 1
             , Css.width <| Css.pct 100

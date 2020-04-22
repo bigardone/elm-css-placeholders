@@ -115,7 +115,8 @@ view (Triangle { backgroundColor, corner, size }) =
                     )
     in
     Html.div
-        [ Html.css
+        [ Html.class "placeholder-triangle"
+        , Html.css
             [ Css.height Css.zero
             , Css.width Css.zero
             , Css.borderStyle Css.solid

@@ -78,7 +78,8 @@ withWidth width (Rectangle rectangle) =
 view : Rectangle -> Html msg
 view (Rectangle { backgroundColor, borderRadius, height, width }) =
     Html.div
-        [ Html.css
+        [ Html.class "placeholder-rectangle"
+        , Html.css
             [ Css.backgroundColor backgroundColor
             , Css.height height
             , Css.width width

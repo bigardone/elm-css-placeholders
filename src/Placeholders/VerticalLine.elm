@@ -51,7 +51,8 @@ default =
 view : VerticalLine -> Html msg
 view (VerticalLine { backgroundColor }) =
     Html.div
-        [ Html.css
+        [ Html.class "placeholder-vertical-line"
+        , Html.css
             [ Css.backgroundColor backgroundColor
             , Css.height <| Css.pct 100
             , Css.width <| Css.px 1
