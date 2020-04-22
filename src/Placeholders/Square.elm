@@ -1,5 +1,5 @@
 module Placeholders.Square exposing
-    ( Square, default
+    ( Square, default, withBackgroundColor, withSize
     , view
     )
 
@@ -8,7 +8,7 @@ module Placeholders.Square exposing
 
 # Definition
 
-@docs Square, default
+@docs Square, default, withBackgroundColor, withSize
 
 
 # View
@@ -24,27 +24,43 @@ import Html.Styled.Attributes as Html
 
 {-| Represents the configuration for a square placeholder
 -}
-type alias Square =
-    { backgroundColor : Css.Color
-    , borderRadius : Css.Px
-    , size : Css.Px
-    }
+type Square
+    = Square
+        { backgroundColor : Css.Color
+        , borderRadius : Css.Px
+        , size : Css.Px
+        }
 
 
 {-| Returns a default configuration for a square placeholder.
 -}
 default : Square
 default =
-    { backgroundColor = Css.rgba 0 0 0 0.3
-    , borderRadius = Css.px 4
-    , size = Css.px 100
-    }
+    Square
+        { backgroundColor = Css.rgba 0 0 0 0.3
+        , borderRadius = Css.px 4
+        , size = Css.px 100
+        }
+
+
+{-| Adds `backgroundColor` to a `Square`.
+-}
+withBackgroundColor : Css.Color -> Square -> Square
+withBackgroundColor color (Square square) =
+    Square { square | backgroundColor = color }
+
+
+{-| Adds `size` to a `Square`.
+-}
+withSize : Css.Px -> Square -> Square
+withSize size (Square square) =
+    Square { square | size = size }
 
 
 {-| Renders a square placeholder using the given configuration.
 -}
 view : Square -> Html msg
-view { backgroundColor, borderRadius, size } =
+view (Square { backgroundColor, borderRadius, size }) =
     Html.div
         [ Html.css
             [ Css.backgroundColor backgroundColor

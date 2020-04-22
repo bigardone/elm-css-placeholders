@@ -1,5 +1,5 @@
 module Placeholders.Triangle exposing
-    ( Triangle, Corner(..), default, withBottomCorner, withLeftCorner, withRightCorner
+    ( Triangle, Corner(..), default, withBottomCorner, withLeftCorner, withRightCorner, withBackgroundColor, withSize
     , view
     )
 
@@ -8,7 +8,7 @@ module Placeholders.Triangle exposing
 
 # Definition
 
-@docs Triangle, Corner, default, withBottomCorner, withLeftCorner, withRightCorner
+@docs Triangle, Corner, default, withBottomCorner, withLeftCorner, withRightCorner, withBackgroundColor, withSize
 
 
 # View
@@ -24,11 +24,12 @@ import Html.Styled.Attributes as Html
 
 {-| Represents the configuration for a triangle placeholder
 -}
-type alias Triangle =
-    { backgroundColor : Css.Color
-    , corner : Corner
-    , size : Css.Px
-    }
+type Triangle
+    = Triangle
+        { backgroundColor : Css.Color
+        , corner : Corner
+        , size : Css.Px
+        }
 
 
 {-| Represents a triangle corner.
@@ -44,37 +45,52 @@ type Corner
 -}
 default : Triangle
 default =
-    { backgroundColor = Css.rgba 0 0 0 0.3
-    , corner = Top
-    , size = Css.px 100
-    }
+    Triangle
+        { backgroundColor = Css.rgba 0 0 0 0.3
+        , corner = Top
+        , size = Css.px 100
+        }
+
+
+{-| Adds `backgroundColor` to a `Triangle`.
+-}
+withBackgroundColor : Css.Color -> Triangle -> Triangle
+withBackgroundColor color (Triangle triangle) =
+    Triangle { triangle | backgroundColor = color }
+
+
+{-| Adds `size` to a `Triangle`.
+-}
+withSize : Css.Px -> Triangle -> Triangle
+withSize size (Triangle triangle) =
+    Triangle { triangle | size = size }
 
 
 {-| Sets the right corner to a given triangle.
 -}
 withRightCorner : Triangle -> Triangle
-withRightCorner triangle =
-    { triangle | corner = Right }
+withRightCorner (Triangle triangle) =
+    Triangle { triangle | corner = Right }
 
 
 {-| Sets the bottom corner to a given triangle.
 -}
 withBottomCorner : Triangle -> Triangle
-withBottomCorner triangle =
-    { triangle | corner = Bottom }
+withBottomCorner (Triangle triangle) =
+    Triangle { triangle | corner = Bottom }
 
 
 {-| Sets the left corner to a given triangle.
 -}
 withLeftCorner : Triangle -> Triangle
-withLeftCorner triangle =
-    { triangle | corner = Left }
+withLeftCorner (Triangle triangle) =
+    Triangle { triangle | corner = Left }
 
 
 {-| Renders a triangle placeholder using the given configuration.
 -}
 view : Triangle -> Html msg
-view { backgroundColor, corner, size } =
+view (Triangle { backgroundColor, corner, size }) =
     let
         ( borderWidth, borderColor ) =
             case corner of

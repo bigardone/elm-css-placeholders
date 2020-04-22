@@ -1,5 +1,5 @@
 module Placeholders.Circle exposing
-    ( Circle, default
+    ( Circle, default, withBackgroundColor, withSize
     , view
     )
 
@@ -8,7 +8,7 @@ module Placeholders.Circle exposing
 
 # Definition
 
-@docs Circle, default
+@docs Circle, default, withBackgroundColor, withSize
 
 
 # View
@@ -24,27 +24,44 @@ import Html.Styled.Attributes as Html
 
 {-| Represents the configuration for a circle placeholder
 -}
-type alias Circle =
-    { backgroundColor : Css.Color
-    , size : Css.Px
-    }
+type Circle
+    = Circle
+        { backgroundColor : Css.Color
+        , size : Css.Px
+        }
 
 
 {-| Returns a default configuration for a circle placeholder.
 -}
 default : Circle
 default =
-    { backgroundColor = Css.rgba 0 0 0 0.3
-    , size = Css.px 100
-    }
+    Circle
+        { backgroundColor = Css.rgba 0 0 0 0.3
+        , size = Css.px 100
+        }
+
+
+{-| Adds `backgroundColor` to a `Circle`.
+-}
+withBackgroundColor : Css.Color -> Circle -> Circle
+withBackgroundColor color (Circle circle) =
+    Circle { circle | backgroundColor = color }
+
+
+{-| Adds `size` to a `Circle`.
+-}
+withSize : Css.Px -> Circle -> Circle
+withSize size (Circle circle) =
+    Circle { circle | size = size }
 
 
 {-| Renders a circle placeholder using the given configuration.
 -}
 view : Circle -> Html msg
-view { backgroundColor, size } =
+view (Circle { backgroundColor, size }) =
     Html.div
-        [ Html.css
+        [ Html.class "placeholder-circle"
+        , Html.css
             [ Css.backgroundColor backgroundColor
             , Css.height size
             , Css.width size

@@ -1,5 +1,5 @@
 module Placeholders.Block exposing
-    ( Block, default, withItems, init
+    ( Block, default, withItems, withHeight, withBackgroundColor, init
     , Msg, update
     , view
     )
@@ -9,7 +9,7 @@ module Placeholders.Block exposing
 
 # Definition
 
-@docs Block, default, withItems, init
+@docs Block, default, withItems, withHeight, withBackgroundColor, init
 
 
 # Update
@@ -39,35 +39,51 @@ It has the following attributes:
   - `items`: a list of integers which is used to randomize the number of lines.
 
 -}
-type alias Block =
-    { backgroundColor : Css.Color
-    , height : Css.Px
-    , items : List Int
-    }
+type Block
+    = Block
+        { backgroundColor : Css.Color
+        , height : Css.Px
+        , items : List Int
+        }
 
 
 {-| Returns a default configuration for a block placeholder.
 -}
 default : Block
 default =
-    { backgroundColor = Css.rgba 0 0 0 0.3
-    , height = Css.px 4
-    , items = [ 1, 2, 3, 4, 5 ]
-    }
+    Block
+        { backgroundColor = Css.rgba 0 0 0 0.3
+        , height = Css.px 4
+        , items = [ 1, 2, 3, 4, 5 ]
+        }
 
 
 {-| Adds `items` to a `Block`.
 -}
 withItems : List Int -> Block -> Block
-withItems items block =
-    { block | items = items }
+withItems items (Block block) =
+    Block { block | items = items }
+
+
+{-| Adds `height` to a `Block`.
+-}
+withHeight : Css.Px -> Block -> Block
+withHeight height (Block block) =
+    Block { block | height = height }
+
+
+{-| Adds `backgroundColor` to a `Block`.
+-}
+withBackgroundColor : Css.Color -> Block -> Block
+withBackgroundColor color (Block block) =
+    Block { block | backgroundColor = color }
 
 
 {-| Inits a block placeholder shuffling its items.
 -}
 init : Block -> ( Block, Cmd Msg )
-init block =
-    ( block, block.items |> Random.List.shuffle |> Random.generate ShuffleItems )
+init ((Block { items }) as block) =
+    ( block, items |> Random.List.shuffle |> Random.generate ShuffleItems )
 
 
 {-| Block msg.
@@ -79,16 +95,16 @@ type Msg
 {-| Block update.
 -}
 update : Msg -> Block -> ( Block, Cmd Msg )
-update msg block =
+update msg (Block block) =
     case msg of
         ShuffleItems items ->
-            ( { block | items = items }, Cmd.none )
+            ( Block { block | items = items }, Cmd.none )
 
 
 {-| Renders a block placeholder using the given configuration.
 -}
 view : Block -> Html msg
-view ({ items } as blockConfig) =
+view ((Block { items }) as blockConfig) =
     items
         |> List.map (item blockConfig)
         |> HtmlKeyed.node "div"
@@ -102,17 +118,19 @@ view ({ items } as blockConfig) =
 
 
 item : Block -> Int -> ( String, Html msg )
-item { backgroundColor, height } numberOfItems =
+item (Block { backgroundColor, height }) numberOfItems =
     ( String.fromInt numberOfItems
     , Html.div
-        [ Html.css
+        [ Html.class "placeholder-block"
+        , Html.css
             [ Css.marginBottom <| Css.px 8
             , Css.marginRight <| Css.px 8
             , Css.property "width" (String.fromInt (numberOfItems * 10) ++ "%")
             ]
         ]
         [ Html.div
-            [ Html.css
+            [ Html.class "placeholder-block__item"
+            , Html.css
                 [ Css.backgroundColor backgroundColor
                 , Css.height height
                 , Css.marginRight <| Css.px 8

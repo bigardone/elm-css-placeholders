@@ -1,5 +1,5 @@
 module Placeholders.Line exposing
-    ( Line, default
+    ( Line, default, withBackgroundColor
     , view
     )
 
@@ -8,7 +8,7 @@ module Placeholders.Line exposing
 
 # Definition
 
-@docs Line, default
+@docs Line, default, withBackgroundColor
 
 
 # View
@@ -24,23 +24,31 @@ import Html.Styled.Attributes as Html
 
 {-| Represents the configuration for a line placeholder
 -}
-type alias Line =
-    { backgroundColor : Css.Color
-    }
+type Line
+    = Line
+        { backgroundColor : Css.Color
+        }
 
 
 {-| Returns a default configuration for a line placeholder.
 -}
 default : Line
 default =
-    { backgroundColor = Css.rgba 0 0 0 0.3
-    }
+    Line
+        { backgroundColor = Css.rgba 0 0 0 0.3 }
+
+
+{-| Adds `backgroundColor` to a `Line`.
+-}
+withBackgroundColor : Css.Color -> Line -> Line
+withBackgroundColor color (Line line) =
+    Line { line | backgroundColor = color }
 
 
 {-| Renders a line placeholder using the given configuration.
 -}
 view : Line -> Html msg
-view { backgroundColor } =
+view (Line { backgroundColor }) =
     Html.div
         [ Html.css
             [ Css.backgroundColor backgroundColor
